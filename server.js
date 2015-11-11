@@ -13,8 +13,8 @@ server.listen(8080, function () {
 var sc = require('soundclouder');
 
 sc.init(
-    '75aef74799f5fd3149b69ea56c34462c', // YOUR CLIENT ID
-    'a6a65dd73860988bea6808c6ac04823f', // YOUR CLIENT SECRET
+    '874fc7fe4c534db21ed6b7bc1462b731', // YOUR CLIENT ID
+    '89a8fe353d29e7070a054e44a394f5a9', // YOUR CLIENT SECRET
     'http://localhost:8080/soundcloud-auth' // SET THIS REDIRECT URI IN SOUNDCLOUD
 );
 
@@ -43,12 +43,16 @@ expressApp.get('/', function (req, res) {
 expressApp.get('/soundcloud-auth', function (req, res) {
 
     var code = req.query.code;
-    ACCESS_TOKEN = code;
     // authorize and get an access token
+    console.log("CODE: " + code)
+     console.log("Query: " + req.query)
+
     sc.auth(code, function (error, access_token) {
         if (error) {
             console.error(error.message);
         }
+        ACCESS_TOKEN = access_token;
+
         res.render('callback');
     });
 
