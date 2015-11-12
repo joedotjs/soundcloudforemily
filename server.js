@@ -55,6 +55,7 @@ expressApp.get('/soundcloud-auth', function (req, res) {
         }
 
         ACCESS_TOKEN = JSON.parse(response.body).access_token;
+        console.log("ACCESS TOKEN: " + ACCESS_TOKEN)
 
         if (typeof ACCESS_TOKEN === 'undefined') {
             auth();
