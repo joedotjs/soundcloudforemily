@@ -1,3 +1,14 @@
 body {
     font-family: Impact;
 }
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: blue;
+    padding: 10px;
+    margin: 10px;
+}

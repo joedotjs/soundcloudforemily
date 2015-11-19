@@ -24,54 +24,47 @@ function startAppLogic() {
     //     console.error(err);
     // });
 
-var trackUrl = 'https://soundcloud.com/dj_ches';
+var userUrl = 'https://soundcloud.com/bonnieandclydeofficial';
 
-// SC.get( '/resolve.json?url=' + trackUrl + '&client_id=874fc7fe4c534db21ed6b7bc1462b731'  ,
-//   function (result) {
-//     console.log(result);
-//   }
-// );
-
-$.get('http://api.soundcloud.com/resolve.json?url=' + trackUrl + '&client_id=874fc7fe4c534db21ed6b7bc1462b731'  , function (result) {
+$.get('http://api.soundcloud.com/resolve.json?url=' + userUrl + '&client_id=874fc7fe4c534db21ed6b7bc1462b731'  , function (result) {
   console.log("RESULT: " + result.id);
   return result;
   })
-  .then(function(id) {
-    console.log("I HAVE THE ID: " + id.id) ;
-    SC.get('/users/' + id.id+ '/tracks')
+  .then(function(user) {
+    console.log("I HAVE THE ID: " + user.id) ;
+    SC.get('/users/' + user.id+ '/tracks')
     .then(function (tracks) {
         console.log(tracks);
+         // appends all tracks
+         var url = "http://localhost:8080/tracks?";
+          for ( var track in tracks) {
+            console.log(track==0)
+            if ( track==0){
+              url+= "ids="+ tracks[track].id
+            } else {url+= "&ids="+ tracks[track].id}
+          }
+
+           $('body').append('<a href=' + url + ' class="button">TEST BUTTON</a>')
 
          for ( var track in tracks) {
-         console.log("TRACK: " + track)
-         SC.oEmbed(tracks[track].permalink_url, {
-         auto_play: false
-         }).then(function(embed){
-        $('body').append(embed.html);
-           });
-      }
+           console.log("TRACK: " + track)
+           console.log("TRACK_ID: " + tracks[track].id)
+           if (tracks[track].downloadable === true){
+              console.log("DOWNLOAD URL: " + '/tracks/'+ tracks[track].id + '/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731')
+            //  $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
 
+              SC.oEmbed(tracks[track].permalink_url, {
+                auto_play: false
+              }).then(function(embed){
+              $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
+                  $('body').append(embed.html);
+                });
+           }
+        }
       });
   });
 
 
-//     SC.oEmbed(tracks[0].permalink_url, {
-// +        auto_play: true
-// +    }).then(function(embed){
-// +        $('body').append(embed.html);
-// +    });
-
-// var getComments = function (track) {
-//   return SC.get('/tracks/' + track.id + '/comments');
-// };
-
-// var listComments = function (comments) {
-//   comments.forEach(function(comment){
-//     console.log(comment.body);
-//   });
-// };
-
-// SC.resolve(track_url).then(getComments).then(listComments);
 
 
 
