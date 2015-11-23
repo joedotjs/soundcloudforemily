@@ -85,70 +85,26 @@ expressApp.get('/tracks', function (req, res) {
     console.log(req.query.ids)
 
     var trackNum = 1
-  //  req.query.ids.forEach( function(id) {
+    async.parallel([ function(callback) {
+      req.query.ids.forEach( function(id) {
+          var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack'+trackNum+'.mp4'));
+          var rem = request('https://api.soundcloud.com/tracks/'+id+'/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
+              console.log("trackNUM", trackNum)
+              console.log("ID", id)
+              console.log("PATH",filePath)
 
-    //     var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack'+trackNum+'.mp4'));
-    //     var rem = request('https://api.soundcloud.com/tracks/' + id+ '/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
-
-    //      rem.on('data', function(chunk){
-    //           //console.log(chunk)
-    //           console.log(filePath)
-    //           console.log(trackNum)
-    //           filePath.write(chunk);
-    //           res.write(chunk);
-    //       //    if (trackNum===3) { res.end()}
-    //     trackNum+=1;
-
-    //      }).on('end', function(){
-    //         filePath.end();
-    //         console.log("downloaded")
-
-    //      });
-
-    // });
-
-  async.parallel([ function(callback) {
-    var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack1.mp4'));
-    var rem = request('https://api.soundcloud.com/tracks/214150107/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
-
-         rem.on('data', function(chunk){
-              //console.log(chunk)
-              console.log(filePath)
-              console.log(trackNum)
+          rem.on('data', function(chunk){
               filePath.write(chunk);
-            //  res.write(chunk);
-          //    if (trackNum===3) { res.end()}
-
           }).on('end', function(){
-            filePath.end();
-            console.log("downloaded")
-           });
+                filePath.end();
+                console.log("downloaded")
+          });
+              trackNum+=1;
+      });
           callback();
-    }, function(callback) {
-    var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack2.mp4'));
-    var rem = request('https://api.soundcloud.com/tracks/214150107/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
-
-         rem.on('data', function(chunk){
-              //console.log(chunk)
-              console.log(filePath)
-              console.log(trackNum)
-              filePath.write(chunk);
-            //  res.write(chunk);
-          //    if (trackNum===3) { res.end()}
-
-          }).on('end', function(){
-            filePath.end();
-            console.log("downloaded")
-           });
-        callback();
-    } ], function done(err, results) {
-        if (err) {
-            throw err;
-        }
-        res.end("\nDone!");
-    });
-
-
-
+      }], function done(err, results) {
+            if (err) { throw err; }
+             res.end("\nDone!");
+      });
 
 });

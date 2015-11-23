@@ -37,12 +37,18 @@ $.get('http://api.soundcloud.com/resolve.json?url=' + userUrl + '&client_id=874f
         console.log(tracks);
          // appends all tracks
          var url = "http://localhost:8080/tracks?";
+         var appendStr = ""
           for ( var track in tracks) {
-            console.log(track==0)
-            if ( track==0){
-              url+= "ids="+ tracks[track].id
-            } else {url+= "&ids="+ tracks[track].id}
+              console.log(track==0)
+              if (tracks[track].downloadable === true){
+                 if (appendStr.length === 0 ) {
+                  appendStr+= "ids="+ tracks[track].id;
+                } else {
+                  appendStr+= "&ids="+ tracks[track].id;
+                }
+              }
           }
+          url+= appendStr;
 
            $('body').append('<a href=' + url + ' class="button">TEST BUTTON</a>')
 
