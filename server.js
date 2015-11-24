@@ -10,6 +10,7 @@ var fs = require('fs')
 var request = require('request');
 var swig = require('swig');
 var path = require('path');
+var tracks = require('./track_funcs');
 
 var ACCESS_TOKEN = null;
 
@@ -86,21 +87,7 @@ expressApp.get('/tracks', function (req, res) {
 
     var trackNum = 1
     async.parallel([ function(callback) {
-      req.query.ids.forEach( function(id) {
-          var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack'+trackNum+'.mp4'));
-          var rem = request('https://api.soundcloud.com/tracks/'+id+'/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
-              console.log("trackNUM", trackNum)
-              console.log("ID", id)
-              console.log("PATH",filePath)
-
-          rem.on('data', function(chunk){
-              filePath.write(chunk);
-          }).on('end', function(){
-                filePath.end();
-                console.log("downloaded")
-          });
-              trackNum+=1;
-      });
+      tracks.downloadTracks(req.query.ids);
           callback();
       }], function done(err, results) {
             if (err) { throw err; }
