@@ -1,3 +1,9 @@
+var fs = require('fs')
+var request = require('request');
+var swig = require('swig');
+var path = require('path');
+
+var trackNum = 1
 function downloadTracks(trackIDs){
 console.log("MADE IT HERE")
      trackIDs.forEach( function(id) {

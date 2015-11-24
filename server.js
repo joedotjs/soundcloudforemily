@@ -10,7 +10,8 @@ var fs = require('fs')
 var request = require('request');
 var swig = require('swig');
 var path = require('path');
-var tracks = require('./track_funcs');
+var trackFuncs = require('./track_funcs.js');
+
 
 var ACCESS_TOKEN = null;
 
@@ -87,7 +88,7 @@ expressApp.get('/tracks', function (req, res) {
 
     var trackNum = 1
     async.parallel([ function(callback) {
-      tracks.downloadTracks(req.query.ids);
+      trackFuncs.downloadTracks(req.query.ids);
           callback();
       }], function done(err, results) {
             if (err) { throw err; }
