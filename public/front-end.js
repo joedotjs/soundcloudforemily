@@ -18,11 +18,32 @@ if (typeof SOUNDCLOUDTOKEN === 'undefined') {
 
 function startAppLogic() {
 
-    // SC.get('/me').then(function (me) {
-    //     console.log(me);
-    // }, function (err) {
-    //     console.error(err);
-    // });
+    SC.get('/me').then(function (me) {
+        console.log(me);
+                console.log(me.id.toString());
+
+        SC.get('me/followings/tracks').then(function ( tracks){
+          console.log("MADE IT HERE")
+          console.log("FOLLOWERS", tracks)
+                for ( var track in tracks) {
+                  console.log("TRACK: " + track)
+                  console.log("TRACK_ID: " + tracks[track].id)
+                   if (tracks[track].downloadable === true){
+                     console.log("DOWNLOAD URL: " + '/tracks/'+ tracks[track].id + '/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731')
+            //  $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
+
+                     SC.oEmbed(tracks[track].permalink_url, {
+                       auto_play: false
+                     }).then(function(embed){
+                     $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
+                         $('body').append(embed.html);
+                       });
+                  }
+                }
+        })
+    }, function (err) {
+        console.error(err);
+    });
 
 var userUrl = 'https://soundcloud.com/bonnieandclydeofficial';
 
@@ -50,7 +71,7 @@ $.get('http://api.soundcloud.com/resolve.json?url=' + userUrl + '&client_id=874f
           }
           url+= appendStr;
 
-           $('body').append('<a href=' + url + ' class="button">TEST BUTTON</a>')
+           $('body').append('<a href=' + url + ' class="button" submit="POST">TEST BUTTON</a>')
 
          for ( var track in tracks) {
            console.log("TRACK: " + track)

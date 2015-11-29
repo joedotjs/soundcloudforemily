@@ -82,7 +82,7 @@ expressApp.get('/test', function (req, res) {
 });
 
 
-expressApp.get('/tracks', function (req, res) {
+expressApp.post('/tracks', function (req, res) {
     console.log("IM TRYING TO GET TRACKS");
     console.log(req.query.ids)
 
