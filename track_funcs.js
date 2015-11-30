@@ -2,25 +2,51 @@ var fs = require('fs')
 var request = require('request');
 var swig = require('swig');
 var path = require('path');
+var archiver = require('archiver');
+var archive = archiver.create('zip', {});
 
-var trackNum = 1
 function downloadTracks(trackIDs){
-console.log("MADE IT HERE")
-     trackIDs.forEach( function(id) {
-          var filePath = fs.createWriteStream(path.join(__dirname, './tracks/myTrack'+trackNum+'.mp4'));
-          var rem = request('https://api.soundcloud.com/tracks/'+id+'/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
-              console.log("trackNUM", trackNum)
-              console.log("ID", id)
-              console.log("PATH",filePath)
+  console.log("MADE IT HERE")
+  var counter = trackIDs.length;
+  console.log("counter", counter)
 
-          rem.on('data', function(chunk){
-              filePath.write(chunk);
-          }).on('end', function(){
-                filePath.end();
-                console.log("downloaded")
-          });
-              trackNum+=1;
-      });
+
+         trackIDs.forEach( function(id) {
+            console.log("IM THE ID", id)
+
+            request('https://api.soundcloud.com/tracks/'+id+'?client_id=874fc7fe4c534db21ed6b7bc1462b731', function (error, response, body) {
+                if (error){ console.log("YOU FUCKED UP")}
+                  var parseBody = JSON.parse(body)
+                   console.log("BODY", parseBody)
+                   console.log("title", parseBody["title"])
+
+                  var filePath = fs.createWriteStream(path.join(__dirname, './tracks/'+parseBody.title+'.mp4'));
+                  var rem = request('https://api.soundcloud.com/tracks/'+parseBody.id+'/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
+                  console.log("PATH",filePath)
+
+                  rem.on('data', function(chunk){
+                      filePath.write(chunk);
+                  }).on('end', function(){
+                        filePath.end();
+                        counter--
+                        console.log("downloaded left", counter)
+                        if (counter ===0){ zipTracks()}
+                     });
+            });
+
+       });
+}
+
+function zipTracks (){
+  var output = fs.createWriteStream('myBeatDrop.zip');
+  output.on('close', function() { console.log('done') });
+  archive.on('error', function(err) { throw err });
+
+  archive.pipe(output);
+
+  archive.bulk([
+    { expand: true, cwd: './tracks', src: ['**'] }
+  ]).finalize();
 
 }
 

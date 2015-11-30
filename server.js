@@ -34,6 +34,11 @@ expressApp.use(express.static(__dirname + '/node_modules'));
 expressApp.use(bodyParser.urlencoded({extended: true}));
 expressApp.use(bodyParser.json());
 
+expressApp.use(function (err, req, res, next) {
+    console.log(chalk.magenta('      ' + err.message));
+    res.status(err.status || 500).end();
+});
+
 expressApp.get('/', function (req, res) {
     console.log("THIS IS A TEST FOR expressApp")
 
@@ -82,7 +87,7 @@ expressApp.get('/test', function (req, res) {
 });
 
 
-expressApp.post('/tracks', function (req, res) {
+expressApp.get('/tracks', function (req, res, next) {
     console.log("IM TRYING TO GET TRACKS");
     console.log(req.query.ids)
 
@@ -93,6 +98,6 @@ expressApp.post('/tracks', function (req, res) {
       }], function done(err, results) {
             if (err) { throw err; }
              res.end("\nDone!");
-      });
+      })
 
 });
