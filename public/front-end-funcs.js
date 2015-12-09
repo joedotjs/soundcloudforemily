@@ -17,18 +17,19 @@ function createDownloadURL(tracks){
 }
 
 function embedTracks(tracks){
+  console.log("these are the tracks in embed", tracks)
 for ( var track in tracks) {
-                  console.log("TRACK: " + track)
-                  console.log("TRACK_ID: " + tracks[track].id)
+                 // console.log("TRACK: " + track.title)
+                 // console.log("TRACK_ID: " + tracks[track].id)
                    if (tracks[track].downloadable === true){
                      console.log("DOWNLOAD URL: " + '/tracks/'+ tracks[track].id + '/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731')
-            //  $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
+                     var downloadURL = 'http://localhost:8080/tracks?ids='+ tracks[track].id
 
                      SC.oEmbed(tracks[track].permalink_url, {
                        auto_play: false
                      }).then(function(embed){
-                     $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
-                         $('body').append(embed.html);
+                       var embedBox = "<div class='track'>" + embed.html + "</div>"
+                       $('.container').append(embedBox);
                        });
                   }
                 }

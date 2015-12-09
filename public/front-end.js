@@ -17,59 +17,24 @@ if (typeof SOUNDCLOUDTOKEN === 'undefined') {
 }
 
 function startAppLogic() {
-
     SC.get('/me').then(function (me) {
         console.log(me);
         console.log(me.id.toString());
 
-        SC.get('me/followings/tracks').then(function ( tracks){
-          console.log("FOLLOWERS", tracks)
+        SC.get('me/followings/tracks?limit=100000').then(function ( tracks){
+          console.log("FOLLOWING", tracks)
           embedTracks(tracks);
           var url = createDownloadURL(tracks)
 
-           $('body').append('<a href=' + url + ' class="button">MASS TEST BUTTON</a>')
+           $('.container').append('<a href=' + url + ' class="btn btn-primary btn-lg download">MASS TEST BUTTON</a>')
         })
     }, function (err) {
         console.error(err);
     });
 
-var userUrl = 'https://soundcloud.com/bonnieandclydeofficial';
-
-$.get('http://api.soundcloud.com/resolve.json?url=' + userUrl + '&client_id=874fc7fe4c534db21ed6b7bc1462b731'  , function (result) {
-  console.log("RESULT: " + result.id);
-  return result;
-  })
-  .then(function(user) {
-    console.log("I HAVE THE ID: " + user.id) ;
-    SC.get('/users/' + user.id+ '/tracks')
-    .then(function (tracks) {
-        console.log(tracks);
-         // appends all tracks
-         var url = createDownloadURL(tracks)
-
-           $('body').append('<a href=' + url + ' class="button">TEST BUTTON</a>')
-
-         for ( var track in tracks) {
-           console.log("TRACK: " + track)
-           console.log("TRACK_ID: " + tracks[track].id)
-           if (tracks[track].downloadable === true){
-              console.log("DOWNLOAD URL: " + '/tracks/'+ tracks[track].id + '/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731')
-            //  $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
-
-              SC.oEmbed(tracks[track].permalink_url, {
-                auto_play: false
-              }).then(function(embed){
-              $('body').append('<a href="http://localhost:8080/test" class="button">Download</a>')
-                  $('body').append(embed.html);
-                });
-           }
-        }
-      });
-  });
-
-
-
-
+    $('body').on('click', '.download', function(){
+        console.log("THIS DID SOMETHING")
+    })
 
 }
 

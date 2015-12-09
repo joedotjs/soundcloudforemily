@@ -79,14 +79,6 @@ expressApp.get('/soundcloud-auth', function (req, res) {
 });
 
 
-expressApp.get('/test', function (req, res) {
-    console.log("TEST FOR other page")
-    res.setHeader("content-disposition", "attachment; filename=omgitworked.m4a");
-    request('https://api.soundcloud.com/tracks/214150107/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731').pipe(res);
-      console.log("I DOWNLOADED");
-});
-
-
 expressApp.get('/tracks', function (req, res, next) {
     console.log("IM TRYING TO GET TRACKS");
     console.log(req.query.ids)
