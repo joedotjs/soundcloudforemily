@@ -55,8 +55,8 @@ expressApp.get('/soundcloud-auth', function (req, res) {
     request.post({
         url: 'https://api.soundcloud.com/oauth2/token',
         form: {
-            client_id: '874fc7fe4c534db21ed6b7bc1462b731',
-            client_secret: '89a8fe353d29e7070a054e44a394f5a9',
+            client_id: '7884b7ac8cb115055b529125293e9d89',
+            client_secret: '72196ded3cd2578deb33847a85eab0d8',
             redirect_uri: 'http://localhost:8080/soundcloud-auth',
             grant_type: 'authorization_code',
             code: code

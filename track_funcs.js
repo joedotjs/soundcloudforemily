@@ -21,8 +21,10 @@ function downloadTracks(trackIDs){
                     var parseBody = JSON.parse(body)
                      console.log("BODY", parseBody)
                      console.log("title", parseBody["title"])
-
-                    var filePath = fs.createWriteStream(path.join(__dirname, './tracks/'+parseBody.title+'.mp4'));
+                    var filteredTitle = parseBody.title.replace(/\W/g, "_");
+                    console.log("new title", filteredTitle);
+                    var filePath = fs.createWriteStream(path.join(__dirname, './tracks/'+filteredTitle+'.mp4'));
+                    console.log("filePath", filePath)
                     var rem = request('https://api.soundcloud.com/tracks/'+parseBody.id+'/download?&client_id=874fc7fe4c534db21ed6b7bc1462b731');
                     console.log("PATH",filePath)
 
