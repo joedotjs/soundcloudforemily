@@ -1,19 +1,69 @@
 body {
     font-family: Impact;
+    background-color: black;
 }
 
 .container {
   max-width: 80%;
 }
 
+.beatdrop {
+    background-color: gray;
+}
 .btn.btn-primary.btn-lg.download {
-    padding: 15px;
-    margin: auto;
+    padding: 10px;
+    margin: 20px auto;
+    width: 100%;
+    display: block
+
 }
 
 .track {
     padding: 15px;
     margin: 15px;
+
+}
+
+#pic {
+    width: 50px;
+    height: 50px;
+}
+
+#zTest1{
+    z-index: 2;
+}
+
+#zTest2{
+    z-index: 1;
+}
+
+.block{
+    display: block;
+}
+
+#loading {
+    width: 100%;
+}
+
+#spinner {
+    margin-right: auto;
+    margin-left: auto;
+    width: 100px;
+    height: 100px;
+    display: block;
+}
+
+#mega-spinner {
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px;
+    height: 400px;
+    display: block;
+}
+
+.fixed{
+    position: fixed;
+    top: 0;
 }
 /*a.button {
     -webkit-appearance: button;

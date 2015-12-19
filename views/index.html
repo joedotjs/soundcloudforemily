@@ -1,73 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>BeatDrop</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link href="css/bootstrap.css" rel="stylesheet">
-
 </head>
-<body ng-app="BeatDrop">
 
-    <div class ="container">
-        <div class="jumbotron">
-            <h1>BeatDrop</h1>
+<body ng-app="BeatDrop" ng-controller="TrackCtrl">
+    <div id="zTest1" class="navbar navbar-inverse navbar-pad" role="navigation">
+      <div class="container-flex">
+        <div class="navbar-header">
+          <a class="navbar-brand"><span>BeatDrop</span></a>
+          </div>
+              <ul class="nav navbar-nav">
+                  <li ng-show="profilePic" class="active"><img id="pic" ng-src="[[profilePic]]"></li>
+              </ul>
+      </div>
+    </div>
+    <div id="loading" ng-hide="testData">
+        <h3 style="text-align:center;">Scanning Your Profile....</h3>
+        <img id="mega-spinner" src="http://www.arabianbusiness.com/skins/ab.main/gfx/loading_spinner.gif">
+    </div>
+    <div id="zTest2" class="container clearfix" ng-show="testData">
+        <a href="[[url]]" class="btn btn-primary btn-lg download">
+          <p>DOWNLOAD FREE TRACKS</p>
+          <p> CURRENT SIZE: <span style="color:yellow; font-style:bold;">[[fileSize]] MB</span></p>
+        </a>
+        <!-- <iframe id="testWidget" width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/222904994"></iframe> -->
+        <ul class="nav nav-tabs" id="product-table">
+            <li><a href="#1" data-toggle="tab">Free Downloads</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane" id="1">
+                <div lazy-scroll="listData()" ng-repeat="track in testData">
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="[[track.srcUrl | trustUrl]]"></iframe>
+                </div>
+                <div id="loading" ng-click="listData()" ng-show="loadmore">
+                    <h3 style="text-align:center;">Scroll To Load More</h3>
+                    <img id="spinner" src="http://www.arabianbusiness.com/skins/ab.main/gfx/loading_spinner.gif">
+                </div>
+            </div>
         </div>
     </div>
-
-       <iframe  id="testWidget" width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/222904994"></iframe>
-
-<!--     <div ng-controller='testController'>
-      <div class="col-md-6 portfolio-item" lazy-scroll="listData()" ng-repeat="data in testData" >
-              [[data.id]]
-      </div>
-
-    <div class="col-md-10 portfolio-item" ng-click="listData()">
-                [[loadmore]]
-    </div>
-    </div> -->
-
-
-    <ul class="nav nav-tabs" id="product-table">
-  <li><a href="#1" data-toggle="tab">Free Downloads</a>
-  </li>
-  <li><a href="#2" data-toggle="tab">External Party DLs</a>
-  </li>
-  <li><a href="#3" data-toggle="tab">Just Listen!</a>
-  </li>
-</ul>
-
-  <div class="tab-content" ng-controller="TrackCtrl">
-      <h2> [[hi]]</h2>
-      <div  class="tab-pane" id="1">
-        <div lazy-scroll="listData()" ng-repeat= "track in testData">
-    <iframe  width="100%" height="166" scrolling="no" frameborder="no" ng-src="[[track.srcUrl | trustUrl]]"></iframe>
-        </div>
-        <div class="col-md-10 portfolio-item" ng-click="listData()">
-            [[loadmore]]
-        </div>
-      </div>
-      <div class="tab-pane" id="2">
-      </div>
-      <div class="tab-pane" id="3">
-      </div>
-  </div>
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
     <script src="/jquery/dist/jquery.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     {% if soundcloudAccessToken %}
-    <script>var SOUNDCLOUDTOKEN = '{{ soundcloudAccessToken }}'</script>
+    <script>
+    var SOUNDCLOUDTOKEN = '{{ soundcloudAccessToken }}'
+    </script>
     {% endif %}
-     <script src="/angular/angular.js"></script>
-     <script src="lazy-scroll.min.js"></script>
-     <script src="bootstrap.js"></script>
-     <script src="factory.js"></script>
-     <script src="controller.js"></script>
-     <script src="front-end.js"></script>
-<script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
-
-
-
+    <script src="/angular/angular.js"></script>
+    <script src="lazy-scroll.min.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="factory.js"></script>
+    <script src="controller.js"></script>
+    <script src="front-end.js"></script>
+    <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 </body>
+
 </html>
