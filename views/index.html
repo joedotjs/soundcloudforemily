@@ -29,20 +29,24 @@
           <p> CURRENT SIZE: <span style="color:yellow; font-style:bold;">[[fileSize]] MB</span></p>
         </a>
         <!-- <iframe id="testWidget" width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/222904994"></iframe> -->
-        <ul class="nav nav-tabs" id="product-table">
+        <ul class="nav nav-tabs">
             <li><a href="#1" data-toggle="tab">Free Downloads</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane" id="1">
-                <div lazy-scroll="listData()" ng-repeat="track in testData">
-                    <iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="[[track.srcUrl | trustUrl]]"></iframe>
+                <div lazy-scroll-trigger="90" lazy-scroll="listData()" ng-repeat="track in testData">
+                    <div class="col-md-1 boxformat">
+                        <span style="text-align:center;">Add to Downloads</span>
+                        <input type='checkbox' value="[[track.id]]" ng-click="adjustDownloads()" ng-model="track.selected">
+                    </div>
+                    <div class="col-md-11">
+                        <iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="[[track.srcUrl | trustUrl ]]"></iframe>
+                    </div>
                 </div>
                 <div id="loading" ng-click="listData()" ng-show="loadmore">
                     <h3 style="text-align:center;">Scroll To Load More</h3>
                     <img id="spinner" src="http://www.arabianbusiness.com/skins/ab.main/gfx/loading_spinner.gif">
                 </div>
-            </div>
         </div>
     </div>
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>

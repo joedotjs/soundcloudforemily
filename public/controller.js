@@ -19,17 +19,24 @@
             $('#product-table a:first').tab('show')
             TrackFactory.getFollowersTracks().then(function(tracks) {
                 console.log("FOLLOWING", tracks)
-                var DLtest = TrackFactory.extractFreeDownloads(tracks)
+                var DLtest = TrackFactory.extractFreeDownloads(tracks).sort(function( a, b){
+                     console.log("a", a.user.username)
+                     console.log("b", b.user.username)
+                     console.log(a.user.username > b.user.username)
+                     return a.user.username > b.user.username
+                   })
                 console.log("DL TEST", DLtest)
-                    //embedTracks(tracks);
-                    // TrackFactory.embedToTab('1', DLtest);
-                $scope.tracks = DLtest
+
+
+
+
+                $scope.tracks = DLtest;
+
+                console.log("sorted", $scope.tracks)
+
                 $scope.fileSize = TrackFactory.calcSize($scope.tracks)
                 listedTracks = $scope.tracks
-                console.log("tracks", $scope.tracks)
                 $scope.hi = "HELLO"
-                $scope.$digest();
-
 
                 $scope.url = TrackFactory.createDownloadURL(DLtest)
 
@@ -41,6 +48,15 @@
 
                 $scope.loadmore = "Loading More data..";
                 $scope.testData = [];
+                $scope.filteredSelection = [];
+                $scope.adjustDownloads = function() {
+                    console.log("YOU UNTOGGLED ME")
+                   $scope.fileSize = TrackFactory.calcSize($scope.tracks)
+                   $scope.url = TrackFactory.createDownloadURL($scope.tracks)
+
+                };
+
+
 
                 $scope.listData = function() {
                     if (reachLast) {
@@ -49,9 +65,6 @@
 
                     var jsondt = [];
                     var scrolledTracks = $scope.tracks
-                    console.log("test tracks", $scope.tracks)
-                    console.log("start", start)
-                    console.log("end", ending)
                     for (var i = start; i < ending; i++) {
                         jsondt.push(scrolledTracks[i]);
                     };
@@ -60,13 +73,13 @@
 
                     $scope.testData = $scope.testData.concat(jsondt);
                     console.log("TEST DATA???", $scope.testData)
+                    $scope.$digest();
 
                     if (ending >= lastdata) {
                         reachLast = true;
                         $scope.loadmore = "Reached at bottom";
                     }
                     console.log("load more", $scope.loadmore)
-                    $scope.$digest()
                 };
 
                 $scope.listData();
@@ -113,6 +126,7 @@
                 if (tracks[track].downloadable === true) {
                     // console.log("TRACK", tracks[track])
                     tracks[track].srcUrl = 'https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/' + tracks[track].id;
+                    tracks[track].selected = true;
                     freeDLs.push(tracks[track])
                 }
             }
@@ -121,9 +135,12 @@
 
         TrackFactory.calcSize = function(tracks) {
             var size = 0
+            console.log("calculating size!!")
             for (var track in tracks) {
                     // console.log("TRACK", tracks[track])
-              size+=tracks[track].original_content_size
+              if (tracks[track].selected){
+                size+=tracks[track].original_content_size;
+              }
             }
             size = Math.round((size / 1000000) * 100) / 100;
             console.log("size", size)
@@ -156,7 +173,7 @@
                 SC.oEmbed(tracks[track].permalink_url, {
                     auto_play: false
                 }).then(function(embed) {
-                    var embedBox = "<div class='track'>" + embed.html + "</div>"
+                    var embedBox = "<div class='track'><input type='checkbox' checked>" + embed.html + "</div>"
                     $('#' + tab).append(embedBox);
                 });
             }
@@ -166,7 +183,8 @@
             var url = "http://localhost:8080/tracks?";
             var appendStr = ""
             for (var track in tracks) {
-                if (tracks[track].downloadable === true) {
+                if (tracks[track].downloadable === true && tracks[track].selected) {
+                    console.log("HERE", tracks[track])
                     if (appendStr.length === 0) {
                         appendStr += "ids=" + tracks[track].id;
                     } else {
